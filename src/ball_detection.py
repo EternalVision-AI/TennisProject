@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 from scipy import signal
 from scipy.signal import find_peaks
 
-from src.ball_tracker_net import BallTrackerNet
-from src.detection import center_of_box
-from src.utils import get_video_properties
+from ball_tracker_net import BallTrackerNet
+from detection import center_of_box
+from utils import get_video_properties
 
 
 def combine_three_frames(frame1, frame2, frame3, width, height):
@@ -47,7 +47,7 @@ class BallDetector:
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         # Load TrackNet model weights
         self.detector = BallTrackerNet(out_channels=out_channels)
-        saved_state_dict = torch.load(save_state)
+        saved_state_dict = torch.load(save_state, map_location=torch.device('cpu'))
         self.detector.load_state_dict(saved_state_dict['model_state'])
         self.detector.eval().to(self.device)
 
